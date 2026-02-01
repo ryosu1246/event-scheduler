@@ -18,21 +18,11 @@ jobs:
           extensions: pdo_sqlite
           coverage: none
 
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
-
       - name: Prepare environment
         run: cp .env.testing .env
 
-      - name: Generate app key
-        run: php artisan key:generate
-
-      - name: Clear cache
-        run: |
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan route:clear
-          php artisan view:clear
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-scripts
 
       - name: Run tests
         run: vendor/bin/pest
