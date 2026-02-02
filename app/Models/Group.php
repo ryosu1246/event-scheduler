@@ -23,6 +23,7 @@ class Group extends Model
         if ($this->icon_path) {
             return Storage::url($this->icon_path);
         }
+
         return asset('images/default-group-icon.svg');
     }
 

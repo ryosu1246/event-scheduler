@@ -66,6 +66,6 @@ class GroupInvitation extends Model
      */
     public function getInviteUrlAttribute(): string
     {
-        return url('/invite/' . $this->token);
+        return url('/invite/'.$this->token);
     }
 }

@@ -20,5 +20,4 @@ class EventSchedule extends Model
     {
         return $this->hasMany(EventResponse::class, 'event_schedule_id');
     }
-
 }

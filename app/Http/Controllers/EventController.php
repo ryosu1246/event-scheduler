@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Event;
-use App\Models\EventSchedule;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Venue;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -40,13 +39,13 @@ class EventController extends Controller
 
         // ユーザーがグループのメンバーかチェック
         $group = \App\Models\Group::findOrFail($groupId);
-        if (!$group->isMember($user)) {
+        if (! $group->isMember($user)) {
             abort(403, 'このグループにイベントを作成する権限がありません');
         }
 
         $venue = null;
 
-        if (!empty($validated['venue_name'])) {
+        if (! empty($validated['venue_name'])) {
             $venue = Venue::firstOrCreate(
                 ['name' => $validated['venue_name']],
                 [
@@ -144,7 +143,7 @@ class EventController extends Controller
         if ($groupId) {
             // ユーザーがそのグループのメンバーかチェック
             $group = \App\Models\Group::findOrFail($groupId);
-            if (!$group->isMember($user)) {
+            if (! $group->isMember($user)) {
                 abort(403, 'このグループにアクセスする権限がありません');
             }
             $query->where('group_id', $groupId);
@@ -198,7 +197,7 @@ class EventController extends Controller
         $venueData = $validated['venue'] ?? null;
 
         // --- 会場更新または削除 ---
-        if ($venueData && !empty($venueData['name'])) {
+        if ($venueData && ! empty($venueData['name'])) {
             // 既存会場を検索 or 新規作成
             $venue = Venue::firstOrNew(['name' => $venueData['name']]);
 
@@ -223,7 +222,7 @@ class EventController extends Controller
             'venue_id' => $venue ? $venue->id : null, // 会場がなければ null
         ]);
 
-        if (!empty($validated['dates'])) {
+        if (! empty($validated['dates'])) {
             $event->schedules()->delete();
             foreach ($validated['dates'] as $date) {
                 $event->schedules()->create(['date' => $date]);
@@ -257,5 +256,4 @@ class EventController extends Controller
 
         return response()->json(['message' => 'イベントを削除しました']);
     }
-
 }

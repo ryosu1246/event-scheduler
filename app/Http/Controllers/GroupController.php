@@ -93,7 +93,7 @@ class GroupController extends Controller
         $user = Auth::user();
 
         // メンバーでなければアクセス拒否
-        if (!$group->isMember($user) && !$group->isInvited($user)) {
+        if (! $group->isMember($user) && ! $group->isInvited($user)) {
             abort(403, 'このグループにアクセスする権限がありません');
         }
 
@@ -111,7 +111,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isAdmin($user)) {
+        if (! $group->isAdmin($user)) {
             abort(403, 'このグループを編集する権限がありません');
         }
 
@@ -152,7 +152,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isAdmin($user)) {
+        if (! $group->isAdmin($user)) {
             abort(403, 'このグループを削除する権限がありません');
         }
 
@@ -172,11 +172,11 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isMember($user)) {
+        if (! $group->isMember($user)) {
             abort(403, 'このグループにアクセスする権限がありません');
         }
 
-        $members = $group->members()->get()->map(function ($member) use ($group) {
+        $members = $group->members()->get()->map(function ($member) {
             return [
                 'id' => $member->id,
                 'name' => $member->name,
@@ -194,7 +194,7 @@ class GroupController extends Controller
     {
         $currentUser = Auth::user();
 
-        if (!$group->isAdmin($currentUser)) {
+        if (! $group->isAdmin($currentUser)) {
             abort(403, 'メンバーを招待する権限がありません');
         }
 
@@ -204,7 +204,7 @@ class GroupController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'ユーザーが見つかりません'], 404);
         }
 
@@ -224,7 +224,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isInvited($user)) {
+        if (! $group->isInvited($user)) {
             abort(403, 'この招待は存在しません');
         }
 
@@ -242,7 +242,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isInvited($user)) {
+        if (! $group->isInvited($user)) {
             abort(403, 'この招待は存在しません');
         }
 
@@ -257,7 +257,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isMember($user)) {
+        if (! $group->isMember($user)) {
             abort(403, 'このグループのメンバーではありません');
         }
 
@@ -305,7 +305,7 @@ class GroupController extends Controller
     {
         $currentUser = Auth::user();
 
-        if (!$group->isAdmin($currentUser)) {
+        if (! $group->isAdmin($currentUser)) {
             abort(403, 'メンバーを削除する権限がありません');
         }
 
@@ -321,7 +321,7 @@ class GroupController extends Controller
         }
 
         // メンバーかチェック
-        if (!$group->allUsers()->where('user_id', $targetUserId)->exists()) {
+        if (! $group->allUsers()->where('user_id', $targetUserId)->exists()) {
             return response()->json(['message' => 'このユーザーはメンバーではありません'], 404);
         }
 
@@ -336,7 +336,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isMember($user)) {
+        if (! $group->isMember($user)) {
             abort(403, 'このグループにアクセスする権限がありません');
         }
 
@@ -355,7 +355,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if (!$group->isAdmin($user)) {
+        if (! $group->isAdmin($user)) {
             abort(403, '招待リンクを生成する権限がありません');
         }
 
@@ -387,14 +387,14 @@ class GroupController extends Controller
             ->first();
 
         // 無効なトークン
-        if (!$invitation || !$invitation->isValid()) {
+        if (! $invitation || ! $invitation->isValid()) {
             abort(404, '招待リンクが無効または期限切れです');
         }
 
         $user = Auth::user();
 
         // 未ログインの場合はログインページへ
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login', ['redirect' => url()->current()]);
         }
 
@@ -411,7 +411,7 @@ class GroupController extends Controller
                 'group_name' => $invitation->group->name,
                 'group_icon_url' => $invitation->group->icon_url,
                 'inviter_name' => $invitation->inviter->name,
-            ]
+            ],
         ]);
 
         return redirect()->route('groups.index');
@@ -424,7 +424,7 @@ class GroupController extends Controller
             ->where('token', $token)
             ->first();
 
-        if (!$invitation || !$invitation->isValid()) {
+        if (! $invitation || ! $invitation->isValid()) {
             return response()->json(['message' => '招待リンクが無効または期限切れです'], 404);
         }
 
@@ -467,7 +467,7 @@ class GroupController extends Controller
     {
         $invitation = session('pending_invitation');
 
-        if (!$invitation) {
+        if (! $invitation) {
             return response()->json(['invitation' => null]);
         }
 

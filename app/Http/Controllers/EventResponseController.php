@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Event;
 use App\Models\EventResponse;
 use App\Models\EventSchedule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Event;
 
 class EventResponseController extends Controller
 {
@@ -77,6 +77,7 @@ class EventResponseController extends Controller
                 'no' => $schedule->responses()->where('response', 'no')->count(),
             ];
         });
+
         return response()->json($summary);
     }
 

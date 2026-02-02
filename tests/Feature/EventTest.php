@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Event;
 use App\Models\Group;
 use App\Models\User;
 

@@ -1,16 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventResponseController;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\MypageController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GroupController;
-
+use App\Http\Controllers\MypageController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -85,7 +84,7 @@ Route::get('/api/google-api-key', function () {
     $key = env('VITE_GOOGLE_MAPS_API_KEY');
 
     // 現在の年月でキャッシュキーを分ける（例：google_api_usage_2025_10）
-    $monthKey = 'google_api_usage_' . now()->format('Y_m');
+    $monthKey = 'google_api_usage_'.now()->format('Y_m');
 
     // 現在の使用回数を取得
     $count = Cache::get($monthKey, 0);
@@ -105,7 +104,7 @@ Route::get('/api/google-api-key', function () {
     }
 
     // 使用回数を1増加（初回は有効期限を月末まで）
-    if (!Cache::has($monthKey)) {
+    if (! Cache::has($monthKey)) {
         // 例：今月末23:59:59まで
         $endOfMonth = now()->endOfMonth();
         Cache::put($monthKey, 1, $endOfMonth);

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\EventResponse;
+use Illuminate\Http\Request;
 
 class MypageController extends Controller
 {

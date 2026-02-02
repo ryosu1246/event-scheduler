@@ -24,5 +24,8 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-scripts
 
+      - name: Check code style
+        run: vendor/bin/pint --test
+
       - name: Run tests
         run: vendor/bin/pest

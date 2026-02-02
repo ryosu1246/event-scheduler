@@ -89,6 +89,7 @@ class User extends Authenticatable
         if ($this->profile_image) {
             return Storage::url($this->profile_image);
         }
+
         return asset('images/default-avatar.png'); // デフォルト画像
     }
 }
