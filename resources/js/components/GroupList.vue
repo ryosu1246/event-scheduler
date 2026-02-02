@@ -98,7 +98,7 @@
         </div>
         <div class="px-1 pt-2">
           <h3 class="text-sm font-semibold text-stone-800 truncate">{{ group.name }}</h3>
-          <p class="text-xs text-stone-500 text-right">メンバー　{{ group.member_count }}人</p>
+          <p class="text-xs text-stone-500 text-right">メンバー {{ group.member_count }}人</p>
         </div>
       </div>
     </div>
