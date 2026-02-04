@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -26,15 +27,37 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // --- バリデーションを拡張 ---
+        $validated = $request->validated();
+        $request->validate([
+            'profile_image' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        // --- 画像アップロード処理 ---
+        if ($request->hasFile('profile_image')) {
+            // 古い画像を削除（存在する場合のみ）
+            if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+                Storage::disk('public')->delete($user->profile_image);
+            }
+
+            // 新しい画像を保存
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $validated['profile_image'] = $path;
         }
 
-        $request->user()->save();
+        // --- 通常のプロフィール情報更新 ---
+        $user->fill($validated);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        // --- 完了後リダイレクト ---
+        return Redirect::route('mypage')->with('status', 'profile-updated');
     }
 
     /**

@@ -4,7 +4,7 @@
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="__('ユーザーネーム')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
@@ -37,6 +37,17 @@
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Terms Agreement -->
+        <div class="mt-4">
+            <label class="flex items-start">
+                <input type="checkbox" name="terms" class="rounded border-gray-300 text-amber-800 shadow-sm focus:ring-amber-500 mt-1" required />
+                <span class="ms-2 text-sm text-gray-600">
+                    <a href="{{ route('terms') }}" target="_blank" class="underline hover:text-gray-900">利用規約</a>および<a href="{{ route('privacy') }}" target="_blank" class="underline hover:text-gray-900">プライバシーポリシー</a>に同意する
+                </span>
+            </label>
+            <x-input-error :messages="$errors->get('terms')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
