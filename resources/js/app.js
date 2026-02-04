@@ -2,7 +2,7 @@ import './bootstrap';
 import { createApp } from 'vue';
 import EventSchedule from './components/EventSchedule.vue';
 import EventList from './components/EventList.vue';
-import EventVenue from './Components/EventVenue.vue';
+import EventVenue from './components/EventVenue.vue';
 import GroupList from './components/GroupList.vue';
 
 // イベントスケジュール（日程登録）コンポーネントのマウント
