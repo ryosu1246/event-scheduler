@@ -41,6 +41,11 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts \
     ))->build(); \
     echo 'Package manifest generated'.PHP_EOL; \
 "
+RUN php artisan config:clear || true
+RUN php artisan cache:clear || true
+RUN php artisan route:clear || true
+RUN php artisan view:clear || true
+RUN rm -rf bootstrap/cache/*.php || true
 
 RUN chown -R www-data:www-data storage bootstrap/cache database
 

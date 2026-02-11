@@ -9,5 +9,15 @@ RUN npm run build
 
 # Nginx with static files
 FROM nginx:alpine
-COPY public /var/www/public
+
+# デフォルトサイト設定を完全に削除
+RUN rm -rf /usr/share/nginx/html/* \
+    && rm -f /etc/nginx/conf.d/default.conf
+
+# カスタム設定をコピー
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# アプリケーションファイルをコピー
+WORKDIR /var/www
+COPY . /var/www
 COPY --from=assets /app/public/build /var/www/public/build
