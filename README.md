@@ -1,61 +1,161 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# canrit
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+URL: https://www.canrit.com/
 
-## About Laravel
+## 概要
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+canritは、グループでのイベント日程調整を簡単にするWebアプリケーションです。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+イベントを作成し、候補日程を設定すると、メンバーが参加可否を回答できます。各日程の回答状況が一覧で確認でき、最適な日程を素早く決定できます。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 制作背景
 
-## Learning Laravel
+### 複数人での日程調整の煩雑さを解消
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+飲み会や会議など複数人が参加するイベントでは、全員の都合を確認して日程を決めるのに時間がかかります。LINEやメールでやり取りすると、誰がいつ回答したか把握しづらく、調整が煩雑になりがちです。
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+このアプリでは、候補日程に対する全員の回答を一覧で確認できるため、最適な日程をスムーズに決定できます。
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### グループ単位でのイベント管理
 
-## Laravel Sponsors
+サークルやチーム、友人グループなど、同じメンバーで繰り返しイベントを開催することがあります。グループ機能により、メンバーを毎回招待する手間なく、継続的にイベントを管理できます。
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 使用技術
 
-### Premium Partners
+### バックエンド
+- PHP 8.2
+- Laravel 12
+- MySQL 8.0
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### フロントエンド
+- Vue.js 3
+- Tailwind CSS 3
+- Vite
 
-## Contributing
+### インフラ
+- Docker / docker-compose
+- AWS (ECS, Fargate)
+- Nginx
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### その他
+- Laravel Breeze（認証）
+- spatie/laravel-permission（権限管理）
 
-## Code of Conduct
+## 機能一覧
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### ユーザー機能
+- ユーザー登録・ログイン
+- プロフィール画像の設定
+- ユーザー情報の編集
 
-## Security Vulnerabilities
+### グループ機能
+- グループの作成・編集
+- 招待リンクの発行
+- メンバーの管理（管理者/メンバー）
+- グループアイコンの設定
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### イベント機能
+- イベントの作成・編集・削除
+- 候補日程の設定（複数可）
+- 開催場所の設定
 
-## License
+### 日程回答機能
+- 各候補日程への回答（参加可/微妙/不可）
+- 回答状況の一覧表示
+- リアルタイムな集計
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## ER図
+
+```mermaid
+erDiagram
+    users {
+        bigint id PK
+        string name
+        string email
+        string password
+        string profile_image
+        timestamp created_at
+    }
+
+    groups {
+        bigint id PK
+        string name
+        text description
+        string icon_path
+        timestamp created_at
+    }
+
+    group_user_roles {
+        bigint id PK
+        bigint user_id FK
+        bigint group_id FK
+        enum role
+        timestamp created_at
+    }
+
+    group_invitations {
+        bigint id PK
+        bigint group_id FK
+        bigint inviter_id FK
+        string token
+        timestamp expires_at
+    }
+
+    events {
+        bigint id PK
+        string title
+        text description
+        bigint group_id FK
+        bigint created_by FK
+        bigint venue_id FK
+        timestamp created_at
+    }
+
+    event_schedules {
+        bigint id PK
+        bigint event_id FK
+        date date
+        timestamp created_at
+    }
+
+    event_responses {
+        bigint id PK
+        bigint event_schedule_id FK
+        bigint user_id FK
+        enum response
+        timestamp created_at
+    }
+
+    venues {
+        bigint id PK
+        string name
+        decimal latitude
+        decimal longitude
+        timestamp created_at
+    }
+
+    users ||--o{ events : creates
+    users ||--o{ event_responses : responds
+    users ||--o{ group_user_roles : belongs_to
+    users ||--o{ group_invitations : invites
+    groups ||--o{ events : has
+    groups ||--o{ group_user_roles : has
+    groups ||--o{ group_invitations : has
+    events ||--o{ event_schedules : has
+    events }o--|| venues : located_at
+    event_schedules ||--o{ event_responses : has
+```
+
+## ユーザーの声
+
+> 「サークルの飲み会調整に使っています。LINEで何度もやり取りしていた頃と比べて、誰がいつ空いているか一目でわかるので助かっています。」（20代・学生）
+
+> 「プロジェクトの定例会議の日程調整に活用。招待リンクを共有するだけでメンバーを追加できるのが手軽で良いです。UIがもう少し洗練されると嬉しいですが、機能面では十分満足しています。」（30代・会社員）
+
+> 「友人との旅行計画で使いました。回答が3択なのがシンプルでわかりやすい。ただ、過去のイベントを検索する機能があるとさらに便利だと思います。」（20代・会社員）
+
+## 今後の展望
+
+- UI/UXの改良
+- タグ機能の追加
+- イベント検索機能の実装
