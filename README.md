@@ -68,72 +68,6 @@ canritは、グループでのイベント日程調整を簡単にするWebア�
 
 ```mermaid
 erDiagram
-    users {
-        bigint id PK
-        string name
-        string email
-        string password
-        string profile_image
-        timestamp created_at
-    }
-
-    groups {
-        bigint id PK
-        string name
-        text description
-        string icon_path
-        timestamp created_at
-    }
-
-    group_user_roles {
-        bigint id PK
-        bigint user_id FK
-        bigint group_id FK
-        enum role
-        timestamp created_at
-    }
-
-    group_invitations {
-        bigint id PK
-        bigint group_id FK
-        bigint inviter_id FK
-        string token
-        timestamp expires_at
-    }
-
-    events {
-        bigint id PK
-        string title
-        text description
-        bigint group_id FK
-        bigint created_by FK
-        bigint venue_id FK
-        timestamp created_at
-    }
-
-    event_schedules {
-        bigint id PK
-        bigint event_id FK
-        date date
-        timestamp created_at
-    }
-
-    event_responses {
-        bigint id PK
-        bigint event_schedule_id FK
-        bigint user_id FK
-        enum response
-        timestamp created_at
-    }
-
-    venues {
-        bigint id PK
-        string name
-        decimal latitude
-        decimal longitude
-        timestamp created_at
-    }
-
     users ||--o{ events : creates
     users ||--o{ event_responses : responds
     users ||--o{ group_user_roles : belongs_to
@@ -142,8 +76,50 @@ erDiagram
     groups ||--o{ group_user_roles : has
     groups ||--o{ group_invitations : has
     events ||--o{ event_schedules : has
-    events }o--|| venues : located_at
+    events o|--|| venues : located_at
     event_schedules ||--o{ event_responses : has
+
+    users {
+        int id PK
+        string name
+        string email
+    }
+    groups {
+        int id PK
+        string name
+    }
+    events {
+        int id PK
+        string title
+        int group_id FK
+        int created_by FK
+    }
+    event_schedules {
+        int id PK
+        int event_id FK
+        date date
+    }
+    event_responses {
+        int id PK
+        int event_schedule_id FK
+        int user_id FK
+        string response
+    }
+    venues {
+        int id PK
+        string name
+    }
+    group_user_roles {
+        int id PK
+        int user_id FK
+        int group_id FK
+        string role
+    }
+    group_invitations {
+        int id PK
+        int group_id FK
+        string token
+    }
 ```
 
 ## ユーザーの声
